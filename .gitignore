@@ -1,0 +1,9 @@
+config.json
+Storage/
+BackupsOld/
+AutoBackup/
+OldCommandLogs/
+nohup.out
+.vs/
+runGLORYauto.sh
+runGLORY.sh
