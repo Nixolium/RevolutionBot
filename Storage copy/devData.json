@@ -1,0 +1,14 @@
+{
+    "enable": true,
+    "dblenable": true,
+    "debugenable": true,
+    "defaultPrefix": "$",
+    "debugGuildId": "536599503608872961",
+    "debugChannelId": "538710109241606154",
+    "hardbans": {},
+    "admins": [],
+    "devs": [
+        "522616720515530755",
+        "238763232096026624"
+    ]
+}

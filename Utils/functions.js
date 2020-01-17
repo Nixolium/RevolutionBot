@@ -290,6 +290,11 @@ function addmoney(message, money) {
     return money
 }
 
+function getprefix(message) {
+    let prefix = (message.channel.type == "dm") ? defaultPrefix : serverData[message.guild.id].prefix;
+    return prefix
+}
+
 module.exports.clean = function (text) { return clean(text) }
 module.exports.sendMessage = function (channel, text, override) { return sendMessage(channel, text, override) }
 module.exports.replyMessage = function (message, text, override) { return replyMessage(message, text, override) }
@@ -305,6 +310,7 @@ module.exports.calcStat = function (id, stat) { return calcStat(id, stat) }
 module.exports.addxp = function (message, xp) { return addxp(message, xp) }
 module.exports.levelCheck = function (id) { return levelCheck(id) }
 module.exports.addmoney = function (message, money) { return addmoney(message, money) }
+module.exports.getprefix = function (message) { return getprefix(message) }
 
 
 fs.readdir("./Utils/", (err, files) => {
