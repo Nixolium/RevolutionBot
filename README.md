@@ -1,1 +1,1 @@
-# GloryDiscordBot
+# CelestiaDiscordBot
