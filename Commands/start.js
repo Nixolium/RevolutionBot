@@ -99,7 +99,8 @@ module.exports = function (message) {
                 gameData["channels"][channel.id].players[0] = { "id": id, "money": 2, "cards": [0, 0, 0] };
                 gameData["channels"][channel.id].currentTurn = Math.floor(Math.random() * playerCount)
                 gameData["channels"][channel.id].cards = [] //cards are shuffled later
-                gameData["channels"][channel.id].lastMove = {"action": -1, "player": -1}
+                gameData["channels"][channel.id].lastMove = {"action": -1, "player": -1, "counter": -1, "counterplayer": -1}
+                gameData["channels"][channel.id].centerCard = -1
 
                 message.awaitReactions(filter, { max: playerCount - 1, time: 30000, errors: ['time'] })
                     .then(collected => {
@@ -127,10 +128,22 @@ module.exports = function (message) {
                             functions.sendMessage(message.channel, "Cards Shuffled")
 
                             //Cards are dealt
-                            
+                            for (let x = 0; x < playerCount; x++) {
+                                gameData["channels"][channel.id].players[x].cards[0] = gameData["channels"][channel.id].cards[0]
+                                gameData["channels"][channel.id].cards.shift()
+                                gameData["channels"][channel.id].players[x].cards[1] = gameData["channels"][channel.id].cards[0]
+                                gameData["channels"][channel.id].cards.shift()
+                                gameData["channels"][channel.id].players[x].cards[2] = gameData["channels"][channel.id].cards[0]
+                                gameData["channels"][channel.id].cards.shift()
+                            }
+                            //message each player their hand
+
+
                             //Center card is revealed
-                            
+                            gameData["channels"][channel.id].centerCard = gameData["channels"][channel.id].cards.shift()
+
                             //Game board needs to be made now
+                            
                             
                             //Turns begin
 
