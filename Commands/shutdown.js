@@ -6,7 +6,7 @@ module.exports=function(message) {
     if (words.indexOf("-nowrite") == -1) {
         functions.writeData("Storage")
     }
-    message.reply('Ascella is shutting down...').then(function (session) {
+    message.reply('Ascella is turning off...').then(function (session) {
         return bot.destroy()
     }).then(function (destruct) {
         setTimeout(function () {

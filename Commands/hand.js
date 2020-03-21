@@ -3,40 +3,57 @@ module.exports = function (message) {
     let id = message.author.id;
     let target = id;
     let ts = message.createdTimestamp;
-    if (words.length == 1) {
-        //target = message.author.id;
-    } else {
-        target = functions.validate(message)
-        if (target == false) {
-            return;
-        }
-    }
-    if (userData[target].status == 0) {
-        functions.sendMessage(message.channel, "Ascella does not know <@" + target + ">.");
-        return;
-    }
-    if (gameData["channels"][message.channel.id] == undefined){
+    let channel = message.channel
+    //no targets allowed, target always id
+    if (gameData["channels"][message.channel.id] == undefined) {
         functions.sendMessage(message.channel, "There is not currently a game ongoing.");
         return;
     }
-    cardsInHandText = "cint text"
-    centerCardText = "centre text"
-    functions.sendMessage(message.channel, {
+    let playerNumber = -1
+    for (let x = 0; x < gameData["channels"][channel.id].players.length; x++) {
+        console.log(gameData["channels"][channel.id].players[x].id)
+        if (gameData["channels"][channel.id].players[x].id == target) {
+            playerNumber = x
+            break
+        }
+    }
+    if (playerNumber == -1) {
+        functions.sendMessage(message.channel, "You are not in a game.");
+        return
+    }
+    let cardsInHandText = ""
+    let breaker = false
+    for (let x = 0; x < 3; x++) {
+        if (breaker == false) {
+            cardNumber = gameData["channels"][channel.id].players[playerNumber].cards[x]
+            cardsInHandText += gameData.roles[Math.abs(cardNumber) - 1].name
+            if (cardNumber <= 0) {
+                cardsInHandText += " *(Dead)*"
+            } else {
+                cardsInHandText += " *(Active)*"
+                breaker = true
+            }
+            cardsInHandText += "\n"
+        } else {
+            cardsInHandText += "??? *(Unknown)*\n"
+        }
+    }
+
+    functions.dmUser(target, {
         "embed": {
             "title": "Your Cards",
-            //"description": "Here is your spell inventory\nUse `!cast [ID_of_Item]` to cast you spell... yeah \n",
             "color": 13498074,
             "thumbnail": {
                 url: userData[target].avy
             },
             "fields": [
                 {
-                    "name": "Center Card",
-                    "value": centerCardText,
-                    "inline": true
+                    name: "🃏 Center Card 🃏",
+                    value: gameData.roles[(gameData["channels"][channel.id].centerCard) - 1].name,
+                    inline: false
                 },
                 {
-                    "name": "Cards in Hand",
+                    "name": "🎴 Cards in Hand 🎴",
                     "value": cardsInHandText,
                     "inline": true
                 },

@@ -93,13 +93,17 @@ function checkProps(message) {
     if (!userData[id].id) userData[id].id = id
     if (!userData[id].wins) userData[id].wins = 0
     if (!userData[id].losses) userData[id].losses = 0
-    if (!userData[id].avy || Math.random() > 0.999) userData[id].avy = message.author.avatarURL;
+    if (!userData[id].avy || 1 > 0.999) userData[id].avy = message.author.avatarURL
+    if (userData[id].username || 1 > 0.999) userData[id].username = message.author.username
+
+    if (!userData[id].money) userData[id].money = 0;
     /*
     if (userData[id].username != message.author.username) userData[id].username = message.author.username;
     if (!userData[id].avy || Math.random() > 0.9) userData[id].avy = message.author.avatarURL;*/
 
     //Creates object with name as username
 }
+
 function checkStuff(message) {
     let id = message.author.id
     let ts = message.createdTimestamp;
@@ -295,6 +299,160 @@ function getprefix(message) {
     return prefix
 }
 
+function getGameboard(message) {
+    let words = message.content.split(/\s+/)
+    let ts = message.createdTimestamp
+    let id = message.author.id
+    let prefix = functions.getprefix(message)
+    let channel = message.channel
+    let roles = [1, 2, 3, 4, 5]
+    playerCount = gameData["channels"][channel.id].players.length
+
+
+    let gameboard = {
+        embed: {
+            color: 0xfaa920,
+            fields: [{
+                name: "🎲 Current Player 🎲",
+                value: userData[gameData["channels"][channel.id].players[(gameData["channels"][channel.id].currentTurn)].id].username,
+                inline: false
+            }],
+            footer: {
+                text: "Game ID: " + message.channel.id
+            }
+        }
+    }
+
+    gameboard.embed.fields[1] = {
+        name: "🃏 Center Card 🃏",
+        value: gameData.roles[(gameData["channels"][channel.id].centerCard) - 1].name, //CAN BE CHANGED TO MAKE ANY ROLE HAPPEN
+        inline: false
+    }
+
+    for (let x = 0; x < playerCount; x++) {
+        let fieldName = userData[gameData["channels"][channel.id].players[x].id].username + ""
+        let fieldValue = ""
+        fieldValue += "Coins: " + gameData["channels"][channel.id].players[x].money + "\n"
+        let cardsLeft = gameData["channels"][channel.id].players[x].cards.length
+        for (let y = 0; y < 3; y++) {
+            if (gameData["channels"][channel.id].players[x].cards[y] <= 0) {
+                cardsLeft -= 1
+            }
+        }
+        fieldValue += "Lives: " + cardsLeft
+        gameboard.embed.fields[x + 2] = {
+            name: fieldName,
+            value: fieldValue,
+            inline: true
+        }
+    }
+
+    /*{
+    name: "⚔ Coup 31 Game ⚔",
+    value: embedtext,
+    inline: false
+    }
+    
+    This is a sample field.
+    */
+    functions.sendMessage(message.channel, gameboard)
+}
+
+function getHand(message, target) {
+    let words = message.content.split(/\s+/)
+    let id = message.author.id;
+    let ts = message.createdTimestamp;
+    let channel = message.channel
+    if (gameData["channels"][message.channel.id] == undefined) {
+        functions.sendMessage(message.channel, "There is not currently a game ongoing.");
+        return;
+    }
+    let playerNumber = -1
+    for (let x = 0; x < gameData["channels"][channel.id].players.length; x++) {
+        if (gameData["channels"][channel.id].players[x].id == target) {
+            playerNumber = x
+            break
+        }
+    }
+    if (playerNumber == -1) {
+        functions.sendMessage(message.channel, "You are not in a game.");
+        return
+    }
+    let cardsInHandText = ""
+    let breaker = false
+    for (let x = 0; x < 3; x++) {
+        if (breaker == false) {
+            cardNumber = gameData["channels"][channel.id].players[playerNumber].cards[x]
+            cardsInHandText += gameData.roles[Math.abs(cardNumber) - 1].name
+            if (cardNumber <= 0) {
+                cardsInHandText += " *(Dead)*"
+            } else {
+                cardsInHandText += " *(Active)*"
+                breaker = true
+            }
+            cardsInHandText += "\n"
+        } else {
+            cardsInHandText += "??? *(Unknown)*\n"
+        }
+    }
+
+    functions.dmUser(target, {
+        "embed": {
+            "title": "Your Cards",
+            "color": 13498074,
+            "thumbnail": {
+                url: userData[target].avy
+            },
+            "fields": [
+                {
+                    name: "🃏 Center Card 🃏",
+                    value: gameData.roles[(gameData["channels"][channel.id].centerCard) - 1].name,
+                    inline: false
+                },
+                {
+                    "name": "🎴 Cards in Hand 🎴",
+                    "value": cardsInHandText,
+                    "inline": true
+                },
+            ],
+            "footer": {
+                "text": "Game ID: " + message.channel.id
+            }
+        }
+    })
+}
+
+function nextTurn(message) {
+    let channel = message.channel
+    let endcheck = gameData["channels"][channel.id].currentTurn
+    gameData["channels"][channel.id].currentTurn = (gameData["channels"][channel.id].currentTurn + 1) % gameData["channels"][channel.id].players.length
+    if (checkAlive(message)) { //if current player is alive
+
+    } else { //if dead
+        functions.nextTurn(message)
+    }
+    if (gameData["channels"][channel.id].currentTurn == endcheck) {
+        return false
+    }
+    return true
+}
+
+function checkAlive(message) {
+    let channel = message.channel
+    let x = gameData["channels"][channel.id].currentTurn //check if current player is alive
+    let cardsLeft = gameData["channels"][channel.id].players[x].cards.length
+    for (let y = 0; y < 3; y++) {
+        if (gameData["channels"][channel.id].players[x].cards[y] <= 0) {
+            cardsLeft -= 1
+        }
+    }
+    if (cardsLeft == 0) {
+        return false
+    } else {
+        return true
+    }
+}
+
 module.exports.clean = function (text) { return clean(text) }
 module.exports.sendMessage = function (channel, text, override) { return sendMessage(channel, text, override) }
 module.exports.replyMessage = function (message, text, override) { return replyMessage(message, text, override) }
@@ -311,7 +469,10 @@ module.exports.addxp = function (message, xp) { return addxp(message, xp) }
 module.exports.levelCheck = function (id) { return levelCheck(id) }
 module.exports.addmoney = function (message, money) { return addmoney(message, money) }
 module.exports.getprefix = function (message) { return getprefix(message) }
-
+module.exports.getGameboard = function (message) { return getGameboard(message) }
+module.exports.getHand = function (message, target) { return getHand(message, target) }
+module.exports.nextTurn = function (message) { return nextTurn(message) }
+module.exports.checkAlive = function (message) { return checkAlive(message) }
 
 fs.readdir("./Utils/", (err, files) => {
     if (err) return console.error(err);

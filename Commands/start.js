@@ -29,7 +29,7 @@ module.exports = function (message) {
 
             let embedtext = "<@" + id + "> has created a game with " + playerCount + " players!"
             //embedtext += money
-            embedtext += "\nReact to join their game of Coup-31!"
+            embedtext += "\nReact to join their game of Coup 31!"
             let text = {
                 embed: {
                     color: 0xfaa920,
@@ -38,7 +38,7 @@ module.exports = function (message) {
                     },
                     fields: [
                         {
-                            name: "⚔ Open Duel Challenge ⚔",
+                            name: "⚔ Coup 31 Game ⚔",
                             value: embedtext,
                             inline: false
                         }
@@ -99,7 +99,7 @@ module.exports = function (message) {
                 gameData["channels"][channel.id].players[0] = { "id": id, "money": 2, "cards": [0, 0, 0] };
                 gameData["channels"][channel.id].currentTurn = Math.floor(Math.random() * playerCount)
                 gameData["channels"][channel.id].cards = [] //cards are shuffled later
-                gameData["channels"][channel.id].lastMove = {"action": -1, "player": -1, "counter": -1, "counterplayer": -1}
+                gameData["channels"][channel.id].lastMove = { "action": -1, "player": -1, "counter": -1, "counterplayer": -1 }
                 gameData["channels"][channel.id].centerCard = -1
 
                 message.awaitReactions(filter, { max: playerCount - 1, time: 30000, errors: ['time'] })
@@ -107,8 +107,8 @@ module.exports = function (message) {
                         const reaction = collected.first();
 
                         if (reaction.emoji.name === '⚔') {
-                            
-                            functions.sendMessage(message.channel, "Game Start")
+
+                            functions.sendMessage(message.channel, "The game has begun!")
 
                             copies = 0
                             if (playerCount = 2 || 3) {
@@ -124,8 +124,8 @@ module.exports = function (message) {
                             gameData["channels"][channel.id].currentTurn = Math.floor(Math.random() * playerCount)
 
                             gameData["channels"][channel.id].cards = shuffle(gameData["channels"][channel.id].cards)
-                            
-                            functions.sendMessage(message.channel, "Cards Shuffled")
+
+                            //functions.sendMessage(message.channel, "Cards Shuffled")
 
                             //Cards are dealt
                             for (let x = 0; x < playerCount; x++) {
@@ -136,16 +136,20 @@ module.exports = function (message) {
                                 gameData["channels"][channel.id].players[x].cards[2] = gameData["channels"][channel.id].cards[0]
                                 gameData["channels"][channel.id].cards.shift()
                             }
-                            //message each player their hand
-
-
-                            //Center card is revealed
+                            //Center card is dealt
                             gameData["channels"][channel.id].centerCard = gameData["channels"][channel.id].cards.shift()
 
+                            //message each player their hand
+                            for (let x = 0; x < playerCount; x++) {
+                                console.log(gameData["channels"][channel.id].players[x].id)
+                                functions.getHand(message, gameData["channels"][channel.id].players[x].id)
+                            }
+
                             //Game board needs to be made now
-                            
-                            
+                            functions.getGameboard(message) //gets a gameboard
+
                             //Turns begin
+                            functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[(gameData["channels"][channel.id].currentTurn)].id].username + " goes first!")
 
                         } else {
                             functions.sendMessage(message.channel, "Game Canceled.")
