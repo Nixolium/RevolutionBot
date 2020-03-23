@@ -42,6 +42,7 @@ module.exports = function (message) {
     functions.dmUser(target, {
         "embed": {
             "title": "Your Cards",
+            "description": "Your Coins: " + gameData["channels"][channel.id].players[playerNumber].money,
             "color": 13498074,
             "thumbnail": {
                 url: userData[target].avy

@@ -129,12 +129,9 @@ module.exports = function (message) {
 
                             //Cards are dealt
                             for (let x = 0; x < playerCount; x++) {
-                                gameData["channels"][channel.id].players[x].cards[0] = gameData["channels"][channel.id].cards[0]
-                                gameData["channels"][channel.id].cards.shift()
-                                gameData["channels"][channel.id].players[x].cards[1] = gameData["channels"][channel.id].cards[0]
-                                gameData["channels"][channel.id].cards.shift()
-                                gameData["channels"][channel.id].players[x].cards[2] = gameData["channels"][channel.id].cards[0]
-                                gameData["channels"][channel.id].cards.shift()
+                                gameData["channels"][channel.id].players[x].cards[0] = gameData["channels"][channel.id].cards.shift()
+                                gameData["channels"][channel.id].players[x].cards[1] = gameData["channels"][channel.id].cards.shift()
+                                gameData["channels"][channel.id].players[x].cards[2] = gameData["channels"][channel.id].cards.shift()
                             }
                             //Center card is dealt
                             gameData["channels"][channel.id].centerCard = gameData["channels"][channel.id].cards.shift()

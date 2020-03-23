@@ -77,11 +77,11 @@ function validate(message, spot) {
         target = temptarget.id
         targetname = temptarget
     }
-    if (userData[target] == undefined) {
+    /*if (userData[target] == undefined) {
         //Send fail message here
         sendMessage(message.channel, targetname + " is not an existing user.");
         return false;
-    }
+    }*/
 
     return target
 }
@@ -339,6 +339,9 @@ function getGameboard(message) {
                 cardsLeft -= 1
             }
         }
+        if(cardsLeft == 0){
+            cardsLeft == "*(Dead)*"
+        }
         fieldValue += "Lives: " + cardsLeft
         gameboard.embed.fields[x + 2] = {
             name: fieldName,
@@ -399,6 +402,7 @@ function getHand(message, target) {
     functions.dmUser(target, {
         "embed": {
             "title": "Your Cards",
+            "description": "Your Coins: " + gameData["channels"][channel.id].players[playerNumber].money,
             "color": 13498074,
             "thumbnail": {
                 url: userData[target].avy
@@ -426,6 +430,7 @@ function nextTurn(message) {
     let channel = message.channel
     let endcheck = gameData["channels"][channel.id].currentTurn
     gameData["channels"][channel.id].currentTurn = (gameData["channels"][channel.id].currentTurn + 1) % gameData["channels"][channel.id].players.length
+    
     if (checkAlive(message)) { //if current player is alive
 
     } else { //if dead
@@ -453,6 +458,46 @@ function checkAlive(message) {
     }
 }
 
+function checkAlivePerson(message, target) {
+    let playerNumber = -1
+    let channel = message.channel
+    for (let x = 0; x < gameData["channels"][channel.id].players.length; x++) {
+        if (gameData["channels"][channel.id].players[x].id == target) {
+            playerNumber = x
+            break
+        }
+    }
+    if (playerNumber == -1) {
+        functions.sendMessage(message.channel, "You are not in a game.");
+        return false
+    }
+
+    //check if current player is alive
+    let cardsLeft = gameData["channels"][message.channel.id].players[playerNumber].cards.length
+    for (let y = 0; y < 3; y++) {
+        if (gameData["channels"][message.channel.id].players[playerNumber].cards[y] <= 0) {
+            cardsLeft -= 1
+        }
+    }
+    if (cardsLeft == 0) {
+        return false
+    } else {
+        return true
+    }
+}
+
+function loseCard(message, counterplayerNumber) {
+    for (let y = 0; y < 3; y++) {
+        if (gameData["channels"][message.channel.id].players[counterplayerNumber].cards[y] > 0) {
+            gameData["channels"][message.channel.id].players[counterplayerNumber].cards[y] = -1 * gameData["channels"][message.channel.id].players[counterplayerNumber].cards[y]
+            break
+        }
+    }
+    target = gameData["channels"][message.channel.id].players[counterplayerNumber].id
+    functions.getHand(message, target)
+    return
+}
+
 module.exports.clean = function (text) { return clean(text) }
 module.exports.sendMessage = function (channel, text, override) { return sendMessage(channel, text, override) }
 module.exports.replyMessage = function (message, text, override) { return replyMessage(message, text, override) }
@@ -473,6 +518,8 @@ module.exports.getGameboard = function (message) { return getGameboard(message) 
 module.exports.getHand = function (message, target) { return getHand(message, target) }
 module.exports.nextTurn = function (message) { return nextTurn(message) }
 module.exports.checkAlive = function (message) { return checkAlive(message) }
+module.exports.checkAlivePerson = function (message, target) { return checkAlivePerson(message, target) }
+module.exports.loseCard = function (message, target) { return loseCard(message, target) }
 
 fs.readdir("./Utils/", (err, files) => {
     if (err) return console.error(err);
