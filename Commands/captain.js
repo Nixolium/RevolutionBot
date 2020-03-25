@@ -125,7 +125,7 @@ module.exports = function (message) {
             }
         };
         //prior to filter activation
-        message.awaitReactions(filter, { max: 1, time: 5000, errors: ['time'] }) //5 second interval
+        message.awaitReactions(filter, { max: 1, time: 15000, errors: ['time'] }) //5 second interval
             .then(collected => {
                 const reaction = collected.first();
                 //Blocked

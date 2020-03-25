@@ -68,7 +68,7 @@ module.exports = function (message) {
             functions.getGameboard(message)
             //challenge function will shift turns If fail, this will just fizzle
         }
-    }, 5000);
+    }, 15000);
 }
 
 function ambassador(message, playerNumber, supermessage) {
@@ -124,7 +124,7 @@ function ambassador(message, playerNumber, supermessage) {
             }
         };
         //prior to filter activation
-        message.awaitReactions(filter, { max: 1, time: 15000, errors: ['time'] }) //5 second interval
+        message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] }) //5 second interval
             .then(collected => {
                 const reaction = collected.first();
                 //console.log(tempra)
@@ -229,7 +229,7 @@ function ambass2(playerNumber, tempra, supermessage) {
             }
         };
         //prior to filter activation
-        message.awaitReactions(filter, { max: 1, time: 15000, errors: ['time'] }) //5 second interval
+        message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] }) //5 second interval
             .then(collected => {
                 const reaction = collected.first();
                 if (reaction.emoji.name === '🅰️') {

@@ -8,5 +8,5 @@ module.exports = function (message) {
         functions.sendMessage(message.channel, "There is not currently a game ongoing.");
         return;
     }
-    functions.getGameboard(message)
+    functions.getGameboard(message).catch
 }

@@ -65,7 +65,7 @@ module.exports = function (message) {
             //set Gameboard
             functions.getGameboard(message)
         }
-    }, 5000);
+    }, 15000);
 }
 
 function duke(message, playerNumber) {
