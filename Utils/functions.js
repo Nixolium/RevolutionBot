@@ -332,7 +332,7 @@ function getGameboard(message) {
     for (let x = 0; x < playerCount; x++) {
         let fieldName = userData[gameData["channels"][channel.id].players[x].id].username + ""
         let fieldValue = ""
-        fieldValue += "Coins: " + gameData["channels"][channel.id].players[x].money + "\n"
+        fieldValue += "💰" + gameData["channels"][channel.id].players[x].money + "    "
         let cardsLeft = gameData["channels"][channel.id].players[x].cards.length
         for (let y = 0; y < 3; y++) {
             if (gameData["channels"][channel.id].players[x].cards[y] <= 0) {
@@ -342,7 +342,7 @@ function getGameboard(message) {
         if(cardsLeft == 0){
             cardsLeft == "*(Dead)*"
         }
-        fieldValue += "Lives: " + cardsLeft
+        fieldValue += "❤️"  + cardsLeft 
         gameboard.embed.fields[x + 2] = {
             name: fieldName,
             value: fieldValue,
