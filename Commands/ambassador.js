@@ -169,7 +169,7 @@ function ambassador(message, playerNumber, supermessage) {
 
 
 function ambass2(playerNumber, tempra, supermessage, tempra2) {
-    console.log(tempra)
+    console.log(tempra + " " + tempra2)
     let id = gameData["channels"][supermessage.channel.id].players[playerNumber].id;
     let embedvalue = ""
     let emojira = ["🅰️", "🇧", "🇨"]
