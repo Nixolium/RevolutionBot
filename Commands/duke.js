@@ -57,7 +57,7 @@ module.exports = function (message) {
             //challenge function will shift turns If fail, this will just fizzle
             //Next Turn counter
             if (functions.nextTurn(message) == false) {
-                delete gameData["channels"][channel.id] //game ends
+                // //game ends
                 functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
                 return
             }
@@ -84,7 +84,7 @@ function duke(message, playerNumber) {
 
     //Next Turn counter
     if (functions.nextTurn(message) == false) {
-        delete gameData["channels"][channel.id] //game ends
+        // //game ends
         functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
         return
     }

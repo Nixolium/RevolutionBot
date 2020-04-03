@@ -124,7 +124,7 @@ module.exports = function (message) {
                 if (reaction.emoji.name === '🛑') {
                     //Next Turn counter
                     if (functions.nextTurn(message) == false) {
-                        delete gameData["channels"][channel.id] //game ends
+                        // //game ends
                         functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
                         return
                     }
@@ -137,7 +137,7 @@ module.exports = function (message) {
                     } else {
                         //Next Turn counter
                         if (functions.nextTurn(message) == false) {
-                            delete gameData["channels"][channel.id] //game ends
+                            // //game ends
                             functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
                             return
                         }
@@ -154,7 +154,7 @@ module.exports = function (message) {
                 } else {
                     //Next Turn counter
                     if (functions.nextTurn(message) == false) {
-                        delete gameData["channels"][channel.id] //game ends
+                        // //game ends
                         functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
                         return
                     }
@@ -185,7 +185,7 @@ function assassin(message, playerNumber, counterplayerNumber) {
 
     //Next Turn counter
     if (functions.nextTurn(message) == false) {
-        delete gameData["channels"][channel.id] //game ends
+        // //game ends
         functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
         return
     }

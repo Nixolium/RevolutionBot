@@ -59,7 +59,7 @@ module.exports = function (message) {
         } else {
             //Next Turn counter
             if (functions.nextTurn(message) == false) {
-                delete gameData["channels"][channel.id] //game ends
+               //game ends
                 functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
                 return
             }
@@ -82,6 +82,7 @@ function ambassador(message, playerNumber, supermessage) {
     let tempra = []
     tempra.push(gameData["channels"][supermessage.channel.id].cards.shift())
     tempra.push(gameData["channels"][supermessage.channel.id].cards.shift())
+    let tempra2 = []
 
     let embedvalue = ""
     let emojira = ["🅰️", "🇧", "🇨"]
@@ -135,13 +136,13 @@ function ambassador(message, playerNumber, supermessage) {
                     gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].centerCard)
                     //console.log(tempra[0])
                     gameData["channels"][supermessage.channel.id].centerCard = tempra[0]
-                    tempra.shift()
+                    tempra2.push(tempra.shift())
                 } else if (reaction.emoji.name === '🇨') {
                     //move a to main, place c in mid
                     gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].centerCard)
                     //console.log(tempra[1])
                     gameData["channels"][supermessage.channel.id].centerCard = tempra[1]
-                    tempra.pop()
+                    tempra2.push(tempra.pop())
                     //console.log("popped")
                 } else {
 
@@ -238,12 +239,12 @@ function ambass2(playerNumber, tempra, supermessage) {
                     //move a to main, place b in mid
                     gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
                     gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace] = tempra[0]
-                    tempra.shift()
+                    tempra2.push(tempra.shift())
                 } else if (reaction.emoji.name === '🇨') {
                     //move a to main, place c in mid
                     gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
                     gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace] = tempra[1]
-                    tempra.pop()
+                    tempra2.push(tempra.pop())
                 } else {
 
                 }
@@ -252,12 +253,15 @@ function ambass2(playerNumber, tempra, supermessage) {
                 for (let x = 0; x < tempra.size; x++) {
                     gameData["channels"][supermessage.channel.id].cards.push(tempra[x])
                 }
+                for (let x = 0; x < tempra2.size; x++) {
+                    gameData["channels"][supermessage.channel.id].cards.push(tempra2[x])
+                }
 
                 functions.sendMessage(supermessage.channel, userData[gameData["channels"][supermessage.channel.id].players[playerNumber].id].username + " has finished Ambassing.")
                 //end turn
                 //Next Turn counter
                 if (functions.nextTurn(supermessage) == false) {
-                    delete gameData["channels"][supermessage.channel.id] //game ends
+                    //game ends
                     functions.sendMessage(supermessage.channel, userData[gameData["channels"][supermessage.channel.id].players[playerNumber].id].username + "Wins!");
                     return
                 }
@@ -275,7 +279,7 @@ function ambass2(playerNumber, tempra, supermessage) {
                 //end turn
                 //Next Turn counter
                 if (functions.nextTurn(supermessage) == false) {
-                    delete gameData["channels"][supermessage.channel.id] //game ends
+                     //game ends
                     functions.sendMessage(supermessage.channel, userData[gameData["channels"][supermessage.channel.id].players[playerNumber].id].username + "Wins!");
                     return
                 }

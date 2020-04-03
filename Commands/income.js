@@ -51,7 +51,7 @@ module.exports = function (message) {
 
     //Next Turn counter
     if (functions.nextTurn(message) == false) {
-        delete gameData["channels"][channel.id] //game ends
+        // //game ends
         functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + "Wins!");
         return
     }
