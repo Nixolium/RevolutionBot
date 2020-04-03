@@ -82,8 +82,7 @@ function ambassador(message, playerNumber, supermessage) {
     let tempra = []
     tempra.push(gameData["channels"][supermessage.channel.id].cards.shift())
     tempra.push(gameData["channels"][supermessage.channel.id].cards.shift())
-    let tempra2 = []
-
+    console.log(tempra)
     let embedvalue = ""
     let emojira = ["🅰️", "🇧", "🇨"]
     for (let x = 0; x < tempra.length; x++) {
@@ -133,25 +132,25 @@ function ambassador(message, playerNumber, supermessage) {
                     //Nothing changes.
                 } else if (reaction.emoji.name === '🇧') {
                     //move a to main, place b in mid
-                    tempra2.push(gameData["channels"][supermessage.channel.id].centerCard)
+                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].centerCard)
                     //console.log(tempra[0])
                     gameData["channels"][supermessage.channel.id].centerCard = tempra[0]
-                    tempra2.push(tempra.shift())
+                    tempra.shift()
                 } else if (reaction.emoji.name === '🇨') {
                     //move a to main, place c in mid
-                    tempra2.push(gameData["channels"][supermessage.channel.id].centerCard)
+                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].centerCard)
                     //console.log(tempra[1])
                     gameData["channels"][supermessage.channel.id].centerCard = tempra[1]
-                    tempra2.push(tempra.pop())
+                    tempra.pop()
                     //console.log("popped")
                 } else {
 
                 }
 
-                ambass2(playerNumber, tempra, supermessage, tempra2)
+                ambass2(playerNumber, tempra, supermessage)
             })
             .catch(collected => {
-                ambass2(playerNumber, tempra, supermessage, tempra2)
+                ambass2(playerNumber, tempra, supermessage)
             });
 
 
@@ -168,12 +167,9 @@ function ambassador(message, playerNumber, supermessage) {
 
 
 
-function ambass2(playerNumber, tempra, supermessage, tempra2) {
-    tempra3 = []
-    for (let x = 0; x < tempra2.size; x++) {
-        tempra3.push(tempra2[x])
-    }
-    console.log(tempra + "] [" + tempra2)
+function ambass2(playerNumber, tempra, supermessage) {
+    
+    console.log(tempra)
     let id = gameData["channels"][supermessage.channel.id].players[playerNumber].id;
     let embedvalue = ""
     let emojira = ["🅰️", "🇧", "🇨"]
@@ -241,26 +237,23 @@ function ambass2(playerNumber, tempra, supermessage, tempra2) {
                     //Nothing changes.
                 } else if (reaction.emoji.name === '🇧') {
                     //move a to main, place b in mid
-                    tempra3.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
+                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
                     gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace] = tempra[0]
-                    tempra3.push(tempra.shift())
+                    tempra.shift()
                 } else if (reaction.emoji.name === '🇨') {
                     //move a to main, place c in mid
-                    tempra3.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
+                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
                     gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace] = tempra[1]
-                    tempra3.push(tempra.pop())
+                    tempra.pop()
                 } else {
 
                 }
 
-                console.log(tempra + " " + tempra3)
+                console.log(tempra)
                 //end
-                for (let x = 0; x < tempra.size; x++) {
+                for (let x = 0; x < tempra.length; x++) {
                     gameData["channels"][supermessage.channel.id].cards.push(tempra[x])
-                }
-                for (let x = 0; x < tempra3.size; x++) {
-                    gameData["channels"][supermessage.channel.id].cards.push(tempra3[x])
-                }
+                }              
 
 
                 functions.sendMessage(supermessage.channel, userData[gameData["channels"][supermessage.channel.id].players[playerNumber].id].username + " has finished Ambassing.")
@@ -277,7 +270,7 @@ function ambass2(playerNumber, tempra, supermessage, tempra2) {
             })
             .catch(collected => {
                 //end
-                for (let x = 0; x < tempra.size; x++) {
+                for (let x = 0; x < tempra.length; x++) {
                     gameData["channels"][supermessage.channel.id].cards.push(tempra[x])
                 }
 

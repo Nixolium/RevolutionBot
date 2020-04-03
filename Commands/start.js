@@ -110,12 +110,12 @@ module.exports = function (message) {
 
                             functions.sendMessage(message.channel, "The game has begun!")
 
-                            copies = 100
-                            /*if (playerCount = 2 || 3) {
+                            copies = 2
+                            if (playerCount = 2 || 3) {
                                 copies = 3
                             } else if (playerCount = 4) {
                                 copies = playerCount
-                            }*/
+                            }
                             for (let x = 0; x < copies; x++) {
                                 for (let y = 0; y < roles.length; y++) {
                                     gameData["channels"][channel.id].cards.push(roles[y])
