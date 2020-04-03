@@ -88,7 +88,7 @@ function coup(message, playerNumber, counterplayerNumber) {
     let id = message.author.id;
     let channel = message.channel
 
-    functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + " successfully Couped " + userData[gameData["channels"][channel.id].players[counterplayerNumber].id].username + "."
+    functions.sendMessage(message.channel, userData[gameData["channels"][channel.id].players[playerNumber].id].username + " successfully Couped " + userData[gameData["channels"][channel.id].players[counterplayerNumber].id].username + ".")
 
     if (gameData["channels"][channel.id].players[playerNumber].money == undefined) {
         gameData["channels"][channel.id].players[playerNumber].money = 0
