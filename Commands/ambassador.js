@@ -148,10 +148,10 @@ function ambassador(message, playerNumber, supermessage) {
 
                 }
 
-                ambass2(playerNumber, tempra, supermessage)
+                ambass2(playerNumber, tempra, supermessage, tempra2)
             })
             .catch(collected => {
-                ambass2(playerNumber, tempra, supermessage)
+                ambass2(playerNumber, tempra, supermessage, tempra2)
             });
 
 
@@ -168,7 +168,7 @@ function ambassador(message, playerNumber, supermessage) {
 
 
 
-function ambass2(playerNumber, tempra, supermessage) {
+function ambass2(playerNumber, tempra, supermessage, tempra2) {
     console.log(tempra)
     let id = gameData["channels"][supermessage.channel.id].players[playerNumber].id;
     let embedvalue = ""
