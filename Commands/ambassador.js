@@ -68,7 +68,7 @@ module.exports = function (message) {
             functions.getGameboard(message)
             //challenge function will shift turns If fail, this will just fizzle
         }
-    }, 15000);
+    }, 1000); //FIFTEENd
 }
 
 function ambassador(message, playerNumber, supermessage) {
@@ -133,13 +133,13 @@ function ambassador(message, playerNumber, supermessage) {
                     //Nothing changes.
                 } else if (reaction.emoji.name === '🇧') {
                     //move a to main, place b in mid
-                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].centerCard)
+                    tempra2.push(gameData["channels"][supermessage.channel.id].centerCard)
                     //console.log(tempra[0])
                     gameData["channels"][supermessage.channel.id].centerCard = tempra[0]
                     tempra2.push(tempra.shift())
                 } else if (reaction.emoji.name === '🇨') {
                     //move a to main, place c in mid
-                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].centerCard)
+                    tempra2.push(gameData["channels"][supermessage.channel.id].centerCard)
                     //console.log(tempra[1])
                     gameData["channels"][supermessage.channel.id].centerCard = tempra[1]
                     tempra2.push(tempra.pop())
@@ -169,7 +169,11 @@ function ambassador(message, playerNumber, supermessage) {
 
 
 function ambass2(playerNumber, tempra, supermessage, tempra2) {
-    console.log(tempra + " " + tempra2)
+    tempra3 = []
+    for (let x = 0; x < tempra2.size; x++) {
+        tempra3.push(tempra2[x])
+    }
+    console.log(tempra + "] [" + tempra2)
     let id = gameData["channels"][supermessage.channel.id].players[playerNumber].id;
     let embedvalue = ""
     let emojira = ["🅰️", "🇧", "🇨"]
@@ -237,25 +241,27 @@ function ambass2(playerNumber, tempra, supermessage, tempra2) {
                     //Nothing changes.
                 } else if (reaction.emoji.name === '🇧') {
                     //move a to main, place b in mid
-                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
+                    tempra3.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
                     gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace] = tempra[0]
-                    tempra2.push(tempra.shift())
+                    tempra3.push(tempra.shift())
                 } else if (reaction.emoji.name === '🇨') {
                     //move a to main, place c in mid
-                    gameData["channels"][supermessage.channel.id].cards.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
+                    tempra3.push(gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace])
                     gameData["channels"][supermessage.channel.id].players[playerNumber].cards[cardspace] = tempra[1]
-                    tempra2.push(tempra.pop())
+                    tempra3.push(tempra.pop())
                 } else {
 
                 }
 
+                console.log(tempra + " " + tempra3)
                 //end
                 for (let x = 0; x < tempra.size; x++) {
                     gameData["channels"][supermessage.channel.id].cards.push(tempra[x])
                 }
-                for (let x = 0; x < tempra2.size; x++) {
-                    gameData["channels"][supermessage.channel.id].cards.push(tempra2[x])
+                for (let x = 0; x < tempra3.size; x++) {
+                    gameData["channels"][supermessage.channel.id].cards.push(tempra3[x])
                 }
+
 
                 functions.sendMessage(supermessage.channel, userData[gameData["channels"][supermessage.channel.id].players[playerNumber].id].username + " has finished Ambassing.")
                 //end turn
