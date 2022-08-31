@@ -43,29 +43,10 @@ global.defaultPrefix = devData.defaultPrefix
 
 global.moment = require('moment'); //moment package, lets you view date and time nicely
 
-
-
-
 global.devData = JSON.parse(fs.readFileSync('Storage/devData.json', 'utf8'));
 global.serverData = JSON.parse(fs.readFileSync('Storage/serverData.json', 'utf8'));
 global.gameData = JSON.parse(fs.readFileSync('Storage/gameData.json', 'utf8'));
-//global.skillData = JSON.parse(fs.readFileSync('Storage/skillData.json', 'utf8'));
 global.userData = JSON.parse(fs.readFileSync('Storage/userData.json', 'utf8'));
-//global.weaponData = JSON.parse(fs.readFileSync('Storage/weaponData.json', 'utf8'));
-
-//global.battleData = JSON.parse(fs.readFileSync('Storage/battleData.json', 'utf8')); //Stores all ongoing battles
-//global.mapData = JSON.parse(fs.readFileSync('Storage/mapData.json', 'utf8')); //Stores the possible maps of the battles
-
-// I ain't got a clue how this works
-/*if (devData.dblenable) {
-    const http = require('http');
-    const DBL = require('dblapi.js');
-    const server = http.createServer(function (req, res) {
-        res.write("Recieved a post request");
-        res.end();
-    });
-    const dbl = new DBL('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzNjYyMjAyMjcwOTYwODQ2OCIsImJvdCI6dHJ1ZSwiaWF0IjoxNTQ5ODE3MTkxfQ.2pFz9ECHEzpi0OtneZ2LrP-_apXf5oXj2Tsv_OaUPTw', { webhookAuth: 'GLORYpassword', webhookServer: server }, bot);
-}*/
 
 function addServer(guild) {
     if (serverData[guild.id] == undefined) { serverData[guild.id] = {} }
@@ -84,10 +65,10 @@ function evaluateMessage(message) {
     }
     //console.time("actual ping")
     //sendMessage(message.channel, "actual ping")
-    
+
     /*if (banlist.indexOf(message.author.id) != -1){
-		return;
-	}*/
+        return;
+    }*/
     if (message.channel.type != "dm" && serverData[message.guild.id] == undefined) {
         addServer(message.guild)
     }
@@ -224,7 +205,7 @@ function evaluateMessage(message) {
                     delete require.cache[require.resolve(`./Commands/${file}`)];
 
                 });
-                //console.log(commandlist)
+                console.log(commandlist)
 
             });
             functions.replyMessage(message, "All commands have been reloaded!")
@@ -247,11 +228,6 @@ function evaluateMessage(message) {
     console.log(message.author.id + "|" + message.content + "|" + ts)
     commands[command](message)
     functions.checkStuff(message)
-
-    //XP stuff here
-    /*if (userData[message.author.id] != undefined && userData[message.author.id].status != 0) {
-        functions.addxp(message, 1);
-    }*/
 }
 
 bot.on("message", message => {
